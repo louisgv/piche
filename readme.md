@@ -31,7 +31,7 @@ npx piche -s
 npx piche -st
 ```
 
-> UwU piche will cleanup after itself once exit.
+> piche will cleanup all the data piped on SIGINT.
 
 ### Pipe data to piche and share it with other:
 
@@ -39,17 +39,17 @@ npx piche -st
 echo hello world | npx piche
 ```
 
-### (Optionally) Pipe data to piche with a custom name and share it with other:
+### (Optionally) Pipe data to piche with a custom name:
 
 ```bash
-echo hellow world | npx piche -n="hello.txt"
+echo hello world | npx piche -n="hello.txt"
 ```
 
 
 ## Why piche?
 
 - The files are all hosted locally. Your data pipe through localtunnel temporarily. Once piche is shutdown, your data remains on your local machine.
-- When you want to quickly share some log that carry potential credential (which you shouldn't in the first place) and disable it right away after recipent has received it.
+- When you want to quickly share some log that carry sensitive data (which you shouldn't in the first place) and disable it right away after recipent has received it.
 
 ## Install globally
 
