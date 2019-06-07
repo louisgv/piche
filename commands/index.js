@@ -148,7 +148,7 @@ const PicheClean = () => {
 	);
 };
 
-/// a simple program to share text from your terminal safely via localtunnel
+/// UwU A localtunnel based pipe tool to share text quickly from terminal.
 const Piche = ({ start, tmp, clean, name }) => {
 	const [status, setStatus, statusColor, setStatusColor] = useLogState(
 		"piche-core",
@@ -183,7 +183,7 @@ const Piche = ({ start, tmp, clean, name }) => {
 			clearTimeout(timer);
 			const data = e.toString();
 
-			fs.writeFileSync(outputFilePath, data);
+			fs.outputFileSync(outputFilePath, data);
 
 			const isPicheUp = fs.existsSync(statusFilePath);
 			if (!isPicheUp) {
