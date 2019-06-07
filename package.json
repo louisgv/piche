@@ -1,8 +1,12 @@
 {
 	"name": "piche",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"license": "MIT",
 	"bin": "./build/cli.js",
+	"repository": {
+		"type": "git",
+		"url": "https://gitlab.com/louisgv/piche.git"
+	},
 	"engines": {
 		"node": ">=8"
 	},
@@ -15,12 +19,14 @@
 		"build"
 	],
 	"dependencies": {
+		"clipboardy": "^2.0.0",
+		"fs-extra": "^8.0.1",
 		"ink": "^2.2.0",
 		"localtunnel": "^1.9.2",
-		"micro": "^9.3.4",
 		"pasteljs": "^1.0.2",
 		"prop-types": "^15.7.2",
 		"react": "^16.8.6",
-		"serve-handler": "^6.0.1"
+		"serve-handler": "^6.0.1",
+		"uuid": "^3.3.2"
 	}
 }
