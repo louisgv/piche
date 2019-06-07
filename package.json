@@ -1,8 +1,9 @@
 {
 	"name": "piche",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"license": "MIT",
 	"bin": "./build/cli.js",
+	"description": "A localtunnel based pipe tool to share text quickly from terminal",
 	"repository": {
 		"type": "git",
 		"url": "https://gitlab.com/louisgv/piche.git"

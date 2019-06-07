@@ -148,7 +148,7 @@ const PicheClean = () => {
 	);
 };
 
-/// piche a piece of text and send it to the temp folder
+/// a simple program to share text from your terminal safely via localtunnel
 const Piche = ({ start, tmp, clean, name }) => {
 	const [status, setStatus, statusColor, setStatusColor] = useLogState(
 		"piche-core",
@@ -190,7 +190,7 @@ const Piche = ({ start, tmp, clean, name }) => {
 				clipboard.writeSync(name);
 
 				setStatusColor("orange");
-				setStatus(`>.< server is not up, no link to copy. Start a server with: piche -s${tmp ? 't' :''}. The file name (${name}) has been copied to your clipboard.`);
+				setStatus(`>.< server is not up, no link to copy. Start a server with: npx piche -s${tmp ? 't' :''}. The file name (${name}) has been copied to your clipboard.`);
 				return;
 			}
 
@@ -218,7 +218,7 @@ Piche.propTypes = {
 	tmp: PropTypes.bool,
 	/// Cleanup os.tmpdir/.piche and os.homedir/.piche
 	clean: PropTypes.bool,
-	/// Name of the output file
+	/// Name of the output file, default: an uuid/v1
 	name: PropTypes.string
 };
 
