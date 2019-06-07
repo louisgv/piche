@@ -4,6 +4,7 @@ import handler from "serve-handler";
 import localtunnel from "localtunnel";
 import clipboard from "clipboardy";
 import fs from "fs-extra";
+import uuid from "uuid/v1";
 
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
@@ -31,14 +32,14 @@ const PicheStart = ({ tmp }) => {
 		setLocalStatus,
 		localStatusColor,
 		setLocalStatusColor
-	] = useLogState("piche-local", "setup server . . .", "yellow");
+	] = useLogState("piche-local", "owo setup server . . .", "yellow");
 
 	const [
 		tunnelStatus,
 		setTunnelStatus,
 		tunnelStatusColor,
 		setTunnelStatusColor
-	] = useLogState("piche-tunnel", "waiting for piche-local . . .", "orange");
+	] = useLogState("piche-tunnel", "=w= waiting for piche-local . . .", "orange");
 
 	const [tunnel, setTunnel] = useState();
 
@@ -57,9 +58,11 @@ const PicheStart = ({ tmp }) => {
 			setLocalStatusColor("pink");
 			setTunnelStatusColor("orange");
 
-			setLocalStatus(`up and running at http://localhost:${localtunnelPort}`);
+			setLocalStatus(
+				`️UwU up and running at http://localhost:${localtunnelPort}`
+			);
 
-			setTunnelStatus(`setting up tunnel to ${localtunnelPort}`);
+			setTunnelStatus(`'w' setting up tunnel to ${localtunnelPort}`);
 
 			localtunnel(localtunnelPort, async (err, tunnel) => {
 				if (err) {
@@ -68,7 +71,7 @@ const PicheStart = ({ tmp }) => {
 					server.close();
 				}
 				setTunnelStatusColor("green");
-				setTunnelStatus(`up and running at ${tunnel.url}`);
+				setTunnelStatus(`UwU up and running at ${tunnel.url}`);
 
 				await fs.outputJson(statusFilePath, {
 					port: localtunnelPort,
@@ -82,8 +85,8 @@ const PicheStart = ({ tmp }) => {
 		process.on("SIGINT", () => {
 			setLocalStatusColor("magenta");
 			setTunnelStatusColor("cyan");
-			setLocalStatus("shutdown.");
-			setTunnelStatus("shutdown.");
+			setLocalStatus("UvU shutdown.");
+			setTunnelStatus("UvU shutdown.");
 
 			fs.removeSync(statusFilePath);
 
@@ -122,17 +125,17 @@ const PicheClean = () => {
 	);
 	useEffect(() => {
 		const cleanup = async () => {
-			setStatus(`clean up ${tmpPath} . . .`);
+			setStatus(`'w' clean up ${tmpPath} . . .`);
 
 			await fs.remove(tmpPath);
 
 			setStatusColor("orange");
-			setStatus(`clean up ${homePath} . . .`);
+			setStatus(`'w' clean up ${homePath} . . .`);
 
 			await fs.remove(homePath);
 
 			setStatusColor("green");
-			setStatus("done.");
+			setStatus("UwU done.");
 		};
 
 		cleanup();
@@ -146,8 +149,12 @@ const PicheClean = () => {
 };
 
 /// piche a piece of text and send it to the temp folder
-const Piche = ({ start, tmp, clean }) => {
-	const [data, setData] = useState("loading . . .");
+const Piche = ({ start, tmp, clean, name }) => {
+	const [status, setStatus, statusColor, setStatusColor] = useLogState(
+		"piche-core",
+		"'w' piping data . . .",
+		"yellow"
+	);
 
 	if (clean) {
 		return <PicheClean />;
@@ -163,20 +170,45 @@ const Piche = ({ start, tmp, clean }) => {
 
 	const statusFilePath = `${workingPath}/status.json`;
 
+	const outputFilePath = `${publicPath}/${name}`;
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
+			setStatusColor("red");
+			setStatus("'x' ehh... nothing piped");
 			process.stdin.destroy();
-		}, 1000);
+		}, 3000);
 
 		process.stdin.once("data", e => {
 			clearTimeout(timer);
+			const data = e.toString();
 
-			setData(e.toString());
+			fs.writeFileSync(outputFilePath, data);
+
+			const isPicheUp = fs.existsSync(statusFilePath);
+			if (!isPicheUp) {
+				clipboard.writeSync(name);
+
+				setStatusColor("orange");
+				setStatus(`>.< server is not up, no link to copy. Start a server with: piche -s${tmp ? 't' :''}. The file name (${name}) has been copied to your clipboard.`);
+				return;
+			}
+
+			const status = fs.readJsonSync(statusFilePath);
+
+			const tunnelUrl = `${status.url}/${name}`;
+			clipboard.writeSync(tunnelUrl);
+
+			setStatusColor("green");
+			setStatus(`UwU copied to clipboard, url: ${tunnelUrl}`);
 		});
 	}, []);
 
-	return <Text>Here comes the data: {data}</Text>;
+	return (
+		<Color keyword={statusColor}>
+			<Text>{status}</Text>
+		</Color>
+	);
 };
 
 Piche.propTypes = {
@@ -185,19 +217,23 @@ Piche.propTypes = {
 	/// Use os.tmpdir/.piche instead of os.homedir/.piche
 	tmp: PropTypes.bool,
 	/// Cleanup os.tmpdir/.piche and os.homedir/.piche
-	clean: PropTypes.bool
+	clean: PropTypes.bool,
+	/// Name of the output file
+	name: PropTypes.string
 };
 
 Piche.defaultProps = {
 	start: false,
 	tmp: false,
-	clean: false
+	clean: false,
+	name: uuid()
 };
 
 Piche.shortFlags = {
 	start: "s",
 	tmp: "t",
-	clean: "c"
+	clean: "c",
+	name: "n"
 };
 
 export default Piche;
