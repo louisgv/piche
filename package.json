@@ -1,6 +1,6 @@
 {
 	"name": "piche",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"license": "MIT",
 	"bin": "./build/cli.js",
 	"description": "A localtunnel based pipe tool to share text quickly from terminal",
