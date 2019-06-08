@@ -39,7 +39,11 @@ const PicheStart = ({ tmp }) => {
 		setTunnelStatus,
 		tunnelStatusColor,
 		setTunnelStatusColor
-	] = useLogState("piche-tunnel", "=w= waiting for piche-local . . .", "orange");
+	] = useLogState(
+		"piche-tunnel",
+		"=w= waiting for piche-local . . .",
+		"orange"
+	);
 
 	const [tunnel, setTunnel] = useState();
 
@@ -190,17 +194,26 @@ const Piche = ({ start, tmp, clean, name }) => {
 				clipboard.writeSync(name);
 
 				setStatusColor("orange");
-				setStatus(`>.< server is not up, no link to copy. Start a server with: npx piche -s${tmp ? 't' :''}. The file name (${name}) has been copied to your clipboard.`);
+				setStatus(
+					`>.< server is not up, no link to copy. Start a server with: npx piche -s${
+						tmp ? "t" : ""
+					}. The file name (${name}) has been copied to your clipboard.`
+				);
 				return;
 			}
 
 			const status = fs.readJsonSync(statusFilePath);
 
 			const tunnelUrl = `${status.url}/${name}`;
-			clipboard.writeSync(tunnelUrl);
 
-			setStatusColor("green");
-			setStatus(`UwU copied to clipboard, url: ${tunnelUrl}`);
+			try {
+				clipboard.writeSync(tunnelUrl);
+				setStatusColor("green");
+				setStatus(`UwU copied to clipboard, url: ${tunnelUrl}`);
+			} catch (e) {
+				setStatusColor("cyan");
+				setStatus(`UwU no clipboard available, url: ${tunnelUrl}`);
+			}
 		});
 	}, []);
 
